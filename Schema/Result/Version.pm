@@ -82,6 +82,54 @@ __PACKAGE__->set_primary_key("version_id");
 # Created by DBIx::Class::Schema::Loader v0.07036 @ 2015-06-16 10:03:50
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jJRdvOS+YewAdgTOXEp/rw
 
+__PACKAGE__->resultset_class('MicrobedbV2::Schema::Version::ResultSet');
 
+package MicrobedbV2::Schema::Version::ResultSet;
+use base 'DBIx::Class::ResultSet';
+
+sub fetch_version {
+    my ($self, $version) = @_;
+
+    my $v;
+    if($version eq 'current') {
+        return $self->current();
+    } elsif($version eq 'latest') {
+        return $self->latest();
+    } elsif($version =~ /\d+/) {
+        $v = $self->search( {
+            version_id => $version
+                                     }
+            )->first;
+    }
+
+    if($v) {
+        return $v->version_id
+    }
+    return 0;
+
+}
+
+sub latest {
+    my ($self) = @_;
+
+    my $column = $self->get_column('version_id');
+    return $column->max;
+}
+
+sub current {
+    my ($self) = @_;
+
+    my $v = $self->search( {
+        is_current => 1
+                        }
+        )->first;
+
+    if($v) {
+        return $v->version_id
+    }
+    return 0;
+
+    
+}
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

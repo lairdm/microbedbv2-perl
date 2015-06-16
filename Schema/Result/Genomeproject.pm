@@ -205,6 +205,9 @@ __PACKAGE__->add_unique_constraint(
 
 # Created by DBIx::Class::Schema::Loader v0.07036 @ 2015-06-16 10:03:50
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9JY82yDmUo2XsqbQrmb1uw
+__PACKAGE__->has_one('genomeproject_meta', 'MicrobedbV2::Schema::Result::GenomeprojectMeta', { 'foreign.gpv_id' => 'self.gpv_id' }, {cascade_delete =>0} );
+__PACKAGE__->has_many('genomeproject_checksum', 'MicrobedbV2::Schema::Result::GenomeprojectChecksum', { 'foreign.gpv_id' => 'self.gpv_id' }, {cascade_delete =>0} );
+__PACKAGE__->has_many('replicons', 'MicrobedbV2::Schema::Result::Replicon', { 'foreign.gpv_id' => 'self.gpv_id' }, {cascade_delete =>0} );
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

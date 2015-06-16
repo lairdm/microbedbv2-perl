@@ -1,0 +1,8 @@
+#!/bin/env perl
+
+use strict;
+use lib "../";
+use MicrobedbV2::Schema;
+use MicrobedbV2::Singleton;
+
+MicrobedbV2::Singleton->initalize({dsn=> 'DBI:mysql:database=microbedb_dev;host=localhost', user=> 'microbedb', pass=>'mdbpassword'});
