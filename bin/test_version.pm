@@ -24,4 +24,5 @@ print $schema->resultset('Version')->fetch_version(1) . "\n";
 print $schema->resultset('Version')->fetch_version('latest') . "\n";
 print $schema->resultset('Version')->fetch_version('current') . "\n";
 print $schema->resultset('Version')->fetch_version('a') . "\n";
-print $schema->resultset('Version')->latest() . "\n";
+print $schema->latest() . "\n";
+print $schema->fetch_version(1) . "\n";
