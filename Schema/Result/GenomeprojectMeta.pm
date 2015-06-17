@@ -286,6 +286,7 @@ __PACKAGE__->set_primary_key("gpv_id");
 # Created by DBIx::Class::Schema::Loader v0.07036 @ 2015-06-16 10:03:50
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aJT3sIEGpZVMI7+4IVvPvw
 
+__PACKAGE__->belongs_to('genomeproject', 'MicrobedbV2::Schema::Result::Genomeproject', 'gpv_id');
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
