@@ -200,5 +200,64 @@ __PACKAGE__->set_primary_key("rpv_id");
 
 __PACKAGE__->belongs_to('genomeproject', 'MicrobedbV2::Schema::Result::Genomeproject', 'gpv_id');
 
+use File::Spec;
+
+# Overload a Replicon result object, I hope...
+
+sub get_filename {
+    my ($self, $file_suffix) = @_;
+
+    #check to see if the file type is available for this replicon
+    unless($self->file_types =~ /( |^)\.$file_suffix( |$)/){
+        return undef;	
+    }
+
+    my $file_name = File::Spec->catpath(undef, $self->genomeproject->gpv_directory, $self->file_name . ".$file_suffix");
+
+    return $file_name;
+}
+
+
+__PACKAGE__->resultset_class('MicrobedbV2::Schema::Replicon::ResultSet');
+
+package MicrobedbV2::Schema::Replicon::ResultSet;
+use base 'DBIx::Class::ResultSet';
+
+# We have a special case with the Replicon objects,
+# some old pipelines expect to see a version number
+# attached to a RefSeq accession (ie NC_111111.2),
+# so if we get one of those we need to munge the
+# search so it's chopped off and search the 
+# rep_version column instead for the version piece.
+
+sub search {
+    my $self = shift;
+
+    # If we have column searches defined, we'll see if we
+    # need to munge rep_accnum to shop off a version
+    if( defined $_[0] ) {
+        my $search_columns = shift @_;
+
+        if( my $rep_accnum = delete $search_columns->{rep_accnum} ) {
+            # See if we have a version attached to the rep_accnum
+            my ($accnum, $version) = split '\.', $rep_accnum;
+
+            # Now that we've tried to split based on a period,
+            # add the accnum back in, and then try to
+            # add version if we found something after the period
+            $search_columns->{rep_accnum} = $accnum;
+            $search_columns->{rep_version} = $version if( $version );
+
+        }
+        
+        # Put the search terms back on the stack
+        unshift @_, $search_columns;
+    }
+
+    # And call the SUPER
+    return $self->SUPER::search( @_ );
+
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

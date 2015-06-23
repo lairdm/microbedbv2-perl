@@ -209,6 +209,23 @@ __PACKAGE__->has_one('genomeproject_meta', 'MicrobedbV2::Schema::Result::Genomep
 __PACKAGE__->has_many('genomeproject_checksum', 'MicrobedbV2::Schema::Result::GenomeprojectChecksum', { 'foreign.gpv_id' => 'self.gpv_id' }, {cascade_delete =>0} );
 __PACKAGE__->has_many('replicons', 'MicrobedbV2::Schema::Result::Replicon', { 'foreign.gpv_id' => 'self.gpv_id' }, {cascade_delete =>0} );
 
+use File::Spec;
+
+# Overload a Genome Project result object, I hope...
+
+sub get_filename {
+    my ($self, $file_suffix) = @_;
+
+    #check to see if the file type is available for this replicon
+    unless($self->file_types =~ /( |^)\.$file_suffix( |$)/){
+        return undef;	
+    }
+
+    my $file_name = File::Spec->catpath(undef, $self->genomeproject->gpv_directory, $self->filename . ".$file_suffix");
+
+    return $file_name;
+}
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

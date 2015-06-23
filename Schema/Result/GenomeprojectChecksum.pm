@@ -23,7 +23,7 @@ __PACKAGE__->table("genomeproject_checksum");
 
 =head1 ACCESSORS
 
-=head2 version
+=head2 version_id
 
   data_type: 'integer'
   extra: {unsigned => 1}
@@ -50,7 +50,7 @@ __PACKAGE__->table("genomeproject_checksum");
 =cut
 
 __PACKAGE__->add_columns(
-  "version",
+  "version_id",
   { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 0 },
   "filename",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 64 },
@@ -64,7 +64,7 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</version>
+=item * L</version_id>
 
 =item * L</filename>
 
@@ -72,13 +72,15 @@ __PACKAGE__->add_columns(
 
 =cut
 
-__PACKAGE__->set_primary_key("version", "filename");
+__PACKAGE__->set_primary_key("version_id", "filename");
 
 
 # Created by DBIx::Class::Schema::Loader v0.07036 @ 2015-06-16 10:03:50
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2s7ZpRvVjOjhZm+ttyl+MA
 
 __PACKAGE__->belongs_to('genomeproject', 'MicrobedbV2::Schema::Result::Genomeproject', 'gpv_id');
+
+__PACKAGE__->belongs_to('version', 'MicrobedbV2::Schema::Result::Version', 'version_id');
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
