@@ -11,6 +11,11 @@ has schema => (
     writer  => '_set_dbh'
 );
 
+has dsn => (
+    is      => 'rw',
+    isa     => 'Str'
+);
+
 # Initialize a MicrobeDB DBIx::Class connection,
 # grab the authentication information from the
 # environment if we aren't given it
