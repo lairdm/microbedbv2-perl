@@ -33,7 +33,7 @@ sub initialize {
                                                $args->{user},
                                                $args->{pass});
 
-        $self->{dsn} = $dsn;
+        $self->{dsn} = $args->{dsn};
     }
     
     die "Error: Unable to connect to the database for $args->{dsn}" if ! $schema;
