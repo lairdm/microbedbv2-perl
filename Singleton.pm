@@ -26,10 +26,14 @@ sub initialize {
         my $dsn = "DBI:mysql:database=$database;mysql_read_default_file=$db_config;mysql_local_infile=1";
         $schema = MicrobedbV2::Schema->connect($dsn);
 
+        $self->{dsn} = $dsn;
+
     } else {
         $schema = MicrobedbV2::Schema->connect($args->{dsn},
                                                $args->{user},
                                                $args->{pass});
+
+        $self->{dsn} = $dsn;
     }
     
     die "Error: Unable to connect to the database for $args->{dsn}" if ! $schema;
