@@ -61,4 +61,10 @@ sub fetch_schema {
     return $self->schema;
 }
 
+sub fetch_dsn {
+    my $self = shift;
+
+    return $self->dsn;
+}
+
 1;
