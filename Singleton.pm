@@ -26,8 +26,8 @@ sub initialize {
 
     my $schema;
     if(! $args->{dsn}) {
-        my $db_config = "$ENV{HOME}/.my.cnf";
-        my $database=$ENV{"MicrobeDBV2"}||$ENV{"MicrobeDB"}||"microbedb";  # if unable to access .bashrc, use microbedb
+        my $db_config = $ENV{"MicrobeDB_config"}||"$ENV{HOME}/.my.cnf";
+        my $database = $ENV{"MicrobeDBV2"}||$ENV{"MicrobeDB"}||"microbedb";  # if unable to access .bashrc, use microbedb
         my $dsn = "DBI:mysql:database=$database;mysql_read_default_file=$db_config;mysql_local_infile=1";
         $schema = MicrobedbV2::Schema->connect($dsn);
 
